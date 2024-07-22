@@ -1,0 +1,106 @@
+ 
+
+ 
+import tkinter as tk
+from tkinter import filedialog
+ 
+
+# - `import tkinter as tk`: Imports the Tkinter module and renames it as `tk`, making it easier to reference Tkinter classes and functions with the `tk.` prefix.
+  
+# - `from tkinter import filedialog`: Imports the `filedialog` submodule from Tkinter, which provides dialogs for opening and saving files directly.
+
+ 
+def open_file():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        with open(file_path, 'r') as file:
+            text_area.delete(1.0, tk.END)
+            text_area.insert(tk.END, file.read())
+ 
+
+# - `def open_file():`: Defines a function named `open_file` that will be called when the "Open" menu item is selected.
+  
+# - `file_path = filedialog.askopenfilename()`: Opens a file dialog window using `filedialog.askopenfilename()`, which returns the selected file path. If the user cancels the dialog, `file_path` will be an empty string (`''`).
+  
+# - `if file_path:`: Checks if a file path was selected (i.e., not empty or canceled).
+  
+# - `with open(file_path, 'r') as file:`: Opens the selected file in read mode (`'r'`) using a context manager (`with` statement), ensuring it's properly closed after use.
+  
+# - `text_area.delete(1.0, tk.END)`: Clears the existing text in the `text_area` widget from the start (`1.0`) to the end (`tk.END`).
+  
+# - `text_area.insert(tk.END, file.read())`: Inserts the content of the opened file (`file.read()`) at the end of the `text_area` widget (`tk.END`).
+
+ 
+def save_file():
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt",
+                                             filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+    if file_path:
+        with open(file_path, 'w') as file:
+            file.write(text_area.get(1.0, tk.END))
+ 
+
+# - `def save_file():`: Defines a function named `save_file` that will be called when the "Save" menu item is selected.
+  
+# - `file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])`: Opens a file dialog window using `filedialog.asksaveasfilename()`, allowing the user to choose a file path to save to. The `defaultextension=".txt"` specifies that if no extension is provided by the user, `.txt` will be added automatically. The `filetypes` parameter specifies file types that can be saved (in this case, text files with `.txt` extension or all files).
+  
+# - `if file_path:`: Checks if a file path was selected (i.e., not empty or canceled).
+  
+# - `with open(file_path, 'w') as file:`: Opens the selected file in write mode (`'w'`) using a context manager (`with` statement), ensuring it's properly closed after use.
+  
+# - `file.write(text_area.get(1.0, tk.END))`: Writes the content of the `text_area` widget (`text_area.get(1.0, tk.END)`) to the opened file.
+
+ 
+root = tk.Tk()
+root.title("Simple Text Editor")
+ 
+
+# - `root = tk.Tk()`: Creates the main application window (`Tk` instance) and assigns it to the variable `root`.
+  
+# - `root.title("Simple Text Editor")`: Sets the title of the main window to "Simple Text Editor".
+
+ 
+text_area = tk.Text(root)
+text_area.pack(fill='both', expand=True)
+ 
+
+# - `text_area = tk.Text(root)`: Creates a multi-line text widget (`Text` widget) within the main window (`root`).
+  
+# - `text_area.pack(fill='both', expand=True)`: Packs the `text_area` widget into the main window, filling both horizontally and vertically (`fill='both'`) and expanding to fill any extra space (`expand=True`).
+
+ 
+menu = tk.Menu(root)
+root.config(menu=menu)
+ 
+
+# - `menu = tk.Menu(root)`: Creates a menu bar (`Menu` instance) associated with the main window (`root`).
+  
+# - `root.config(menu=menu)`: Configures the main window (`root`) to use `menu` as its menu bar.
+
+ 
+file_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label="File", menu=file_menu)
+file_menu.add_command(label="Open", command=open_file)
+file_menu.add_command(label="Save", command=save_file)
+file_menu.add_separator()
+file_menu.add_command(label="Exit", command=root.quit)
+ 
+
+# - `file_menu = tk.Menu(menu, tearoff=0)`: Creates a dropdown menu (`Menu` instance) under the "File" menu in `menu`. The `tearoff=0` parameter prevents the menu from being torn off.
+  
+# - `menu.add_cascade(label="File", menu=file_menu)`: Adds the "File" dropdown menu (`file_menu`) to the main menu bar (`menu`).
+  
+# - `file_menu.add_command(label="Open", command=open_file)`: Adds a command "Open" to `file_menu` that calls the `open_file()` function when selected.
+  
+# - `file_menu.add_command(label="Save", command=save_file)`: Adds a command "Save" to `file_menu` that calls the `save_file()` function when selected.
+  
+# - `file_menu.add_separator()`: Adds a separator line to `file_menu` to visually separate commands.
+  
+# - `file_menu.add_command(label="Exit", command=root.quit)`: Adds a command "Exit" to `file_menu` that quits the application (`root.quit()`) when selected.
+
+ 
+root.mainloop()
+ 
+
+# - `root.mainloop()`: Starts the Tkinter event loop, which listens for events (like button clicks, key presses) and updates the GUI accordingly. This function call blocks execution until the main window (`root`) is closed by the user.
+
+ 
